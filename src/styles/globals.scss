@@ -1,7 +1,38 @@
-* {
+:root {
+  --background: #1a1d23;
+  --highlight: #ff57b2;
+  --white: #fff;
+  --heading: #f8f8f8;
+  --info: #bbbbbb;
+  --body: #d7d7d7;
+}
+
+*,
+*::after,
+*::before {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-// TODO
+html {
+  font-size: 62.5%;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  background: var(--background);
+  color: var(--body);
+  line-height: 1.75;
+}
+
+button {
+  cursor: pointer;
+}
+
+h1, h2, h3, span, strong, p, a {
+  font-family: 'Inter', sans-serif;
+}
