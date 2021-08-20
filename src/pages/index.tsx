@@ -1,7 +1,6 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 
-import Header from '../components/Header';
 
 import { getPrismicClient } from '../services/prismic';
 import Prismic from '@prismicio/client';
@@ -65,11 +64,10 @@ export default function Home({ postsPagination }: HomeProps) {
 
   return (
     <div className={`${commonStyles.container} ${styles.postsHome}`}>
-      <Header />
       {dataArr.map(post => {
         return (
           <article className={styles.post} key={post.id || post.slug}>
-            <Link href={`/posts/${post.slug}`}>
+            <Link href={`/post/${post.slug}`}>
               <a>
                 <h1>{post.data.title}</h1>
                 <p>{post.data.subtitle}</p>
