@@ -17,7 +17,6 @@ import ptBR from 'date-fns/locale/pt-BR';
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 
-
 interface Post {
   first_publication_date: string | null;
   data: {
@@ -35,13 +34,15 @@ interface Post {
   };
 }
 
-interface Content {
-  heading: 'string';
-  body: [];
-}
-
 interface PostProps {
   post: Post;
+}
+
+interface Content {
+  heading: string;
+  body: {
+    text: string;
+  }[];
 }
 
 export default function Post({ post }: PostProps): JSX.Element {
@@ -49,21 +50,17 @@ export default function Post({ post }: PostProps): JSX.Element {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <div>Carregando...</div>
+    return <div>Carregando...</div>;
   }
 
-  const timeToRead = data.content.reduce(
-    (nWords: Content, letters: Content) => {
-      const bodyWords = PrismicDOM.RichText.asText(letters.body).split(
-        ' '
-      ).length;
-      const headingWords = (nWords.heading + ' ' + letters.heading).split(
-        ' '
-      ).length;
-      const totalWords = bodyWords + headingWords;
-      return Math.ceil(totalWords / 200);
-    }
-  );
+  const totalWords = post.data.content.reduce((total, contentItem) => {
+    total += contentItem.heading.split(' ').length;
+
+    const words = contentItem.body.map(item => item.text.split(' ').length);
+    words.map(word => (total += word));
+    return total;
+  }, 0);
+  const readTime = Math.ceil(totalWords / 200);
 
   return (
     <>
@@ -86,7 +83,7 @@ export default function Post({ post }: PostProps): JSX.Element {
             <FiUser color="#bbbbbb" size="20" /> {data.author}
           </span>
           <span>
-            <FiClock color="#bbbbbb" size="20" /> {timeToRead} min
+            <FiClock color="#bbbbbb" size="20" /> {readTime} min
           </span>
         </div>
         <div className={styles.postContent}>
