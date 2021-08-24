@@ -1,7 +1,6 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 
-
 import { getPrismicClient } from '../services/prismic';
 import Prismic from '@prismicio/client';
 // import { RichText } from 'prismic-dom';
@@ -49,7 +48,21 @@ export default function Home({ postsPagination }: HomeProps) {
       const response = await fetch(next_page);
       const nextArr = await response.json();
       const nextPosts = nextArr.results.map(post => {
-        return post;
+        return {
+          slug: post.uid,
+          first_publication_date: format(
+            new Date(post.first_publication_date),
+            ' d MMM Y',
+            {
+              locale: ptBR,
+            }
+          ),
+          data: {
+            title: post.data.title,
+            subtitle: post.data.subtitle,
+            author: post.data.author,
+          },
+        };
       });
       setNextPosts([...results, ...nextPosts]);
       if (!nextArr.next_page) {
